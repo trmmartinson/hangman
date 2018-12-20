@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--  
+
+
+graphics from https://www.oligalma.com/en/downloads/images/hangman
+
+-->
 
 <head>
     <meta charset="UTF-8">
@@ -18,108 +24,108 @@
     <img id="theman" src="hangman/0.jpg" alt="hangman image">
 
     <span id="wins"></div>
-    <span id="losses"></span>
-    <script>
-        "use strict";
-        var status = -1; // # of misses so far in game, -1 = restart, 1000=WIN
-        var correctword = "";   // the word picked by the computer
-        var guesssofar = ""; //  underscores or users guess so far filled with them
-        var gotoneletter = false;
-        var tmpguess = "";
-        var thisguesschar = "";
-        var correctchar = "";
-        var usedletters = [];
-        var win = false;
-        var inchar = "";
-        var tryletter = false;
-        var doreset = true;
-        var x = 0;
+        <span id="losses"></span>
+        <script>
+            "use strict";
+            var status = -1; // # of misses so far in game, -1 = restart, 1000=WIN
+            var correctword = "";   // the word picked by the computer
+            var guesssofar = ""; //  underscores or users guess so far filled with them
+            var gotoneletter = false;
+            var tmpguess = "";
+            var thisguesschar = "";
+            var correctchar = "";
+            var usedletters = [];
+            var win = false;
+            var inchar = "";
+            var tryletter = false;
+            var doreset = true;
+            var x = 0;
 
-        function getrandomword() {
-            var numwords = 0;
-            var words = [];
-            words = ["one", "two", "three",
-               "four", "five", "six", "seven"];
-            numwords = words.length - 1;
-            return words[Math.floor(Math.random() * numwords)].toUpperCase();
-        }
-        function gamereset() {
-             win = false;
-             status = 4; /* just started a new game, 4 is gallows image# */
-             correctword = getrandomword();
-             guesssofar = "";
-             for (x = 0; x < correctword.length; x++)
-                  guesssofar += "_";
-             document.getElementById("word").innerHTML = "Your Guess";
-             usedletters = [];
-             document.getElementById("usedletters").innerHTML = "Letters Used So Far";
-             document.getElementById('theman').src= "4.jpg";
-             alert("New Game!");
-        }
-
-        document.onkeydown = function (event) {
-            if (doreset) {
-                  gamereset(); // start out with a new game
-                  doreset = false;
+            function getrandomword() {
+                var numwords = 0;
+                var words = [];
+                words = ["one", "two", "three",
+                    "four", "five", "six", "seven"];
+                numwords = words.length - 1;
+                return words[Math.floor(Math.random() * numwords)].toUpperCase();
+            }
+            function gamereset() {
+                win = false;
+                status = 4; /* just started a new game, 4 is gallows image# */
+                correctword = getrandomword();
+                guesssofar = "";
+                for (x = 0; x < correctword.length; x++)
+                    guesssofar += "_";
+                document.getElementById("word").innerHTML = "Your Guess";
+                usedletters = [];
+                document.getElementById("usedletters").innerHTML = "Letters Used So Far";
+                document.getElementById('theman').src = "4.jpg";
+                alert("New Game!");
             }
 
-            inchar = event.key.toLocaleUpperCase();
-            if ( usedletters.indexOf(inchar) === -1) 
-            {
-                usedletters.push(inchar);
-                tryletter = true;
-            }
-            else
-            {
-                alert('already used letter');
-                tryletter = false;
-            }
-            if (!(inchar >= "A" && inchar <= "Z") || inchar == "ENTER")
-                alert("only A through Z are allowed!");
-            else if (tryletter) {
-                gotoneletter = false;
-                tmpguess = "";
-                for (x = 0; x < correctword.length; x++) {
-                    thisguesschar = guesssofar.substr(x, 1);
-                    correctchar = correctword.substr(x, 1);
-                    //case 1, not an underscore, retain letter
-                    //case 2, underscore and correct, replace letter
-                    //case 3, underscore and not correct, put underscore back in
-                    if (thisguesschar != '_') {
-                        tmpguess += correctchar;
-                    }
-                    else if (correctchar == inchar) {
-
-                        gotoneletter = true;  // user got at least 1 letter
-                        tmpguess += correctchar;
-                    }
-                    else {
-                        tmpguess += "_";
-                    }
+            gamereset(); // start out with a new game
+            doreset = false;
+            document.onkeydown = function (event) {
+                if (doreset) {
+                    gamereset(); // start out with a new game
+                    doreset = false;
                 }
 
-                guesssofar = tmpguess;
-                if (!gotoneletter)
-                    status++;
-
-                document.getElementById("usedletters").innerHTML =  "Letters Used So Far:" + usedletters;
-                document.getElementById("word").innerHTML = "Your Guess:" + guesssofar;
-                document.getElementById('theman').src= status + ".jpg";
-                //alert(status);
-                if (guesssofar == correctword)
-                {
-                    alert("you won, the word was:" + correctword);
-                    gamereset();
+                inchar = event.key.toLocaleUpperCase();
+                if (usedletters.indexOf(inchar) === -1) {
+                    usedletters.push(inchar);
+                    tryletter = true;
                 }
-                else if (status == 10) //  user LOST game
-                {
-                    alert("You lost!  the word was:" + correctword   + " " +  status);
-                    gamereset();
-                } 
+                else {
+                    alert('already used letter');
+                    tryletter = false;
+                }
+                if (!(inchar >= "A" && inchar <= "Z") || inchar == "ENTER")
+                    alert("only A through Z are allowed!");
+                else if (tryletter) {
+                    gotoneletter = false;
+                    tmpguess = "";
+                    for (x = 0; x < correctword.length; x++) {
+                        thisguesschar = guesssofar.substr(x, 1);
+                        correctchar = correctword.substr(x, 1);
+                        //case 1, not an underscore, retain letter
+                        //case 2, underscore and correct, replace letter
+                        //case 3, underscore and not correct, put underscore back in
+                        if (thisguesschar != '_') {
+                            tmpguess += correctchar;
+                        }
+                        else if (correctchar == inchar) {
 
-            }
-        } 
-    </script>
+                            gotoneletter = true;  // user got at least 1 letter
+                            tmpguess += correctchar;
+                        }
+                        else {
+                            tmpguess += "_";
+                        }
+                    }
+
+                    guesssofar = tmpguess;
+                    if (!gotoneletter)
+                        status++;
+
+                    document.getElementById("usedletters").innerHTML = "Letters Used So Far:" + usedletters;
+                    document.getElementById("word").innerHTML = "Your Guess:" + guesssofar;
+                    document.getElementById('theman').src = status + ".jpg";
+                    //alert(status);
+                    if (guesssofar == correctword) {
+                        document.getElementById("word").innerHTML = "Your Guess:" + correctword;
+                        alert("you won, the word was:" + correctword);
+                        gamereset();
+                    }
+                    else if (status == 10) //  user LOST game
+                    {
+                        alert("You lost!  the word was:" + correctword);
+                        gamereset();
+                    }
+
+                }
+            } 
+        </script>
 </body>
 
 </html>
